@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Men's Checked Shirts - Browsy Test Store</title>
+  <style>
+    :root {
+      --bg: #f9f8f6;
+      --card-bg: #ffffff;
+      --text: #1a1917;
+      --text-muted: #6b665f;
+      --primary: #c2411a;
+      --border: #e6e2dc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      width: 440px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      font-size: 14px;
+      outline: none;
+      background: #f4f2ee;
+    }
+    .search-input:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+    .header-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #ffffff;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+    .main-layout {
+      max-width: 1280px;
+      margin: 24px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 32px;
+    }
+    .sidebar {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      height: fit-content;
+    }
+    .filter-section {
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+    .filter-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .filter-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .filter-options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .select-dropdown {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      background: #ffffff;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    }
+    .product-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      background: #eae6df;
+    }
+    .product-info {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .product-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .product-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-top: auto;
+      margin-bottom: 10px;
+    }
+    .price-current {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .price-original {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #fdf5eb;
+      color: #92400e;
+      padding: 2px 6px;
+      border-radius: 4px;
+      width: fit-content;
+      margin-bottom: 8px;
+    }
+    .add-to-bag-btn {
+      width: 100%;
+      padding: 8px;
+      background: #161412;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .auth-section {
+      max-width: 1280px;
+      margin: 40px auto 0;
+      padding: 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">ThreadCraft</div>
+    <div class="search-box">
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Search for red checked shirts, sizes, brands..."
+        aria-label="Search clothing catalog"
+        name="q"
+      />
+    </div>
+    <div class="header-actions">
+      <button class="btn">Wishlist</button>
+      <button class="btn btn-primary">Bag (0)</button>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    <!-- Sidebar Filters -->
+    <aside class="sidebar">
+      <h2>Filters</h2>
+      <div class="filter-section" style="margin-top: 14px;">
+        <div class="filter-title">Category</div>
+        <select class="select-dropdown" aria-label="Filter by category">
+          <option value="all">All Casual Shirts</option>
+          <option value="checked" selected>Checked Shirts</option>
+          <option value="solid">Solid Shirts</option>
+          <option value="striped">Striped Shirts</option>
+        </select>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-title">Size</div>
+        <div class="filter-options">
+          <label><input type="checkbox" name="size" value="S"> S (Small)</label>
+          <label><input type="checkbox" name="size" value="M"> M (Medium)</label>
+          <label><input type="checkbox" name="size" value="L"> L (Large)</label>
+          <label><input type="checkbox" name="size" value="XL" checked> XL (Extra Large)</label>
+          <label><input type="checkbox" name="size" value="XXL"> XXL</label>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div class="filter-title">Price Range</div>
+        <div class="filter-options">
+          <label><input type="radio" name="price" value="under-1000" checked> Under ₹1,000</label>
+          <label><input type="radio" name="price" value="1000-2000"> ₹1,000 - ₹2,000</label>
+          <label><input type="radio" name="price" value="above-2000"> Above ₹2,000</label>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-top: 16px;">
+        <button class="btn btn-primary" style="flex: 1;">Apply Filters</button>
+        <button class="btn" style="flex: 1;">Clear All</button>
+      </div>
+    </aside>
+
+    <!-- Product Catalog Results -->
+    <main>
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px;">
+        <div>
+          <h1>Men's Checked Shirts</h1>
+          <p style="color: var(--text-muted); font-size: 13px;">Showing 6 results matching "XL, under ₹1,000"</p>
+        </div>
+        <div>
+          <button class="btn">Sort: Price: Low to High</button>
+        </div>
+      </div>
+
+      <div class="product-grid" id="catalog-results">
+        <!-- Card 1 -->
+        <div class="product-card">
+          <img class="product-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' fill='%23fca5a5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23991b1b' font-size='14'%3ERed Tartan Shirt%3C/text%3E%3C/svg%3E" alt="Roadster Red Buffalo Checked Casual Shirt">
+          <div class="product-info">
+            <h3 class="product-title">Roadster Red Buffalo Checked Casual Shirt</h3>
+            <div class="product-meta">100% Pure Cotton · Regular Fit · Size: XL</div>
+            <div class="rating-badge">4.2 ★ (1.4k)</div>
+            <div class="price-row">
+              <span class="price-current">₹799</span>
+              <span class="price-original">₹1,499</span>
+            </div>
+            <button class="add-to-bag-btn">Add to Bag</button>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="product-card">
+          <img class="product-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' fill='%23fecdd3'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23be123c' font-size='14'%3ECrimson Check%3C/text%3E%3C/svg%3E" alt="Highlander Crimson Red Checked Slim Fit Shirt">
+          <div class="product-info">
+            <h3 class="product-title">Highlander Crimson Red Checked Slim Fit Shirt</h3>
+            <div class="product-meta">Breathable Cotton Blend · Size: XL</div>
+            <div class="rating-badge">4.4 ★ (890)</div>
+            <div class="price-row">
+              <span class="price-current">₹899</span>
+              <span class="price-original">₹1,699</span>
+            </div>
+            <button class="add-to-bag-btn">Add to Bag</button>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="product-card">
+          <img class="product-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' fill='%23fee2e2'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%237f1d1d' font-size='14'%3EMaroon Plaid%3C/text%3E%3C/svg%3E" alt="WROGN Men Deep Maroon Plaid Casual Shirt">
+          <div class="product-info">
+            <h3 class="product-title">WROGN Men Deep Maroon Plaid Casual Shirt</h3>
+            <div class="product-meta">Premium Twill Fabric · Size: XL</div>
+            <div class="rating-badge">4.1 ★ (530)</div>
+            <div class="price-row">
+              <span class="price-current">₹949</span>
+              <span class="price-original">₹1,999</span>
+            </div>
+            <button class="add-to-bag-btn">Add to Bag</button>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="product-card">
+          <img class="product-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' fill='%23fed7aa'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239a3412' font-size='14'%3ERust Checked%3C/text%3E%3C/svg%3E" alt="Dennis Lingo Rust Red Gingham Shirt">
+          <div class="product-info">
+            <h3 class="product-title">Dennis Lingo Rust Red Gingham Shirt</h3>
+            <div class="product-meta">Pre-washed Soft Cotton · Size: XL</div>
+            <div class="rating-badge">4.3 ★ (2.1k)</div>
+            <div class="price-row">
+              <span class="price-current">₹699</span>
+              <span class="price-original">₹1,299</span>
+            </div>
+            <button class="add-to-bag-btn">Add to Bag</button>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="product-card">
+          <img class="product-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' fill='%23fef08a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23854d0e' font-size='14'%3ERed & Navy Check%3C/text%3E%3C/svg%3E" alt="Mast & Harbour Navy & Red Checked Shirt">
+          <div class="product-info">
+            <h3 class="product-title">Mast & Harbour Navy & Red Checked Shirt</h3>
+            <div class="product-meta">Standard Fit Everyday Wear · Size: XL</div>
+            <div class="rating-badge">4.0 ★ (670)</div>
+            <div class="price-row">
+              <span class="price-current">₹849</span>
+              <span class="price-original">₹1,599</span>
+            </div>
+            <button class="add-to-bag-btn">Add to Bag</button>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="product-card">
+          <img class="product-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Crect width='240' height='240' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23334155' font-size='14'%3EClassic Flannel%3C/text%3E%3C/svg%3E" alt="Here&Now Red Heavy Flannel Checked Shirt">
+          <div class="product-info">
+            <h3 class="product-title">Here&Now Red Heavy Flannel Checked Shirt</h3>
+            <div class="product-meta">Warm Brushed Flannel · Size: XL</div>
+            <div class="rating-badge">4.5 ★ (3.4k)</div>
+            <div class="price-row">
+              <span class="price-current">₹999</span>
+              <span class="price-original">₹2,199</span>
+            </div>
+            <button class="add-to-bag-btn">Add to Bag</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Privacy Verification Form (Password and Secret Inputs) -->
+  <section class="auth-section">
+    <h3>Account Access & Verification</h3>
+    <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 14px;">
+      This form tests privacy safeguards: Browsy must never harvest password or sensitive fields.
+    </p>
+    <form action="/login" method="POST" style="display: flex; gap: 12px; align-items: center; max-width: 600px;">
+      <input type="email" name="user_email" placeholder="customer@example.com" class="btn" style="flex: 1;" />
+      <input type="password" name="user_password" placeholder="Enter password (Confidential)" class="btn" style="flex: 1;" />
+      <button type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+  </section>
+</body>
+</html>

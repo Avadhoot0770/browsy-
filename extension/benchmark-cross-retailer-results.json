@@ -1,0 +1,23 @@
+{
+  "myntra": {
+    "status": "PASS",
+    "productsExtracted": 32,
+    "priceVerified": true,
+    "currency": "INR",
+    "sizeEvidenceGrounded": true
+  },
+  "amazon": {
+    "status": "PASS",
+    "productsExtracted": 65,
+    "priceVerified": true,
+    "currency": "INR",
+    "sampleAsin": "B0H1LVTWKZ"
+  },
+  "flipkart": {
+    "status": "PASS",
+    "productsExtracted": 40,
+    "priceVerified": true,
+    "currency": "INR",
+    "sampleId": "SHTGKD73MZJEP6VS"
+  }
+}

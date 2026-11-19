@@ -1,0 +1,24 @@
+{
+  "name": "browsy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Browsy — AI Browser Assistant & Demonstration Platform",
+  "scripts": {
+    "dev": "npm --prefix website run dev",
+    "dev:website": "npm --prefix website run dev",
+    "dev:extension": "npm --prefix extension run dev",
+    "companion": "node backend/companion-service.mjs",
+    "companion:python": "python backend/companion_service.py",
+    "build": "npm --prefix website run build && npm --prefix extension run build",
+    "build:website": "npm --prefix website run build",
+    "build:extension": "npm --prefix extension run build",
+    "test": "npm --prefix extension test",
+    "test:ollama": "npm --prefix extension run test:ollama",
+    "test:compatibility": "npm --prefix extension run test:compatibility",
+    "test:shopping": "npm --prefix extension run test:shopping",
+    "test:scenarios": "npm --prefix extension run test:scenarios",
+    "test:websites": "npm --prefix extension run test:websites",
+    "test:myntra": "npm --prefix extension run test:myntra",
+    "test:e2e": "npm --prefix extension run test:e2e"
+  }
+}

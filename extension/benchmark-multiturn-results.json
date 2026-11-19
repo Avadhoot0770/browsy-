@@ -1,0 +1,51 @@
+[
+  {
+    "turn": 1,
+    "prompt": "Find me a red checked shirt in size XL under ₹1,000.",
+    "elapsedMs": 4720,
+    "success": true,
+    "data": {
+      "hasCard": false,
+      "title": "",
+      "price": "",
+      "statusPill": "",
+      "badge": "✓ COMPLETED · DONE",
+      "text": "I understand:\n\n✓ category: shirt\n✓ color: red\n✓ pattern: checked\n✓ size: XL\n✓ budget: under ₹1,000\n\n I have prepared a plan with 5 proposed actions."
+    }
+  },
+  {
+    "turn": 2,
+    "prompt": "Show me only black ones",
+    "elapsedMs": 3037,
+    "success": true,
+    "data": {
+      "hasBlackAck": true,
+      "lastMsg": "✦ Browsy AssistantGot it — color changed to black. Remaining active filters: category: shirt, pattern: checked, size: XL, budget: under ₹1,000. I found 4 possible matches on this page.What I Understood94% confidenceCategoryshirtColorblackPatterncheckedSizeXLBudget₹1,000 maxMatching Items on this Page (4)Bundles₹300⚠ PartialPattern: checkedPrice: ₹300⚠ Category: shirt (unverified)⚠ Color: black (unverified)⚠ Size XL (unverified)Home⚠ PartialCategory: shirtPattern: checked⚠ Color: black (unverified)⚠ Size XL (unverified)⚠ Price ≤ ₹1,000 (unverified)Red Checked Shirts⚠ PartialCategory: shirtPattern: checked⚠ Color: black (unverified)⚠ Size XL (unverified)⚠ Price ≤ ₹1,000 (unverified)Running Actions...Step 2 of 1●Search Myntra for \"Show me only black ones\"⏹ Stop Execution06:57 PM",
+      "hasCard": false,
+      "title": "",
+      "price": "",
+      "statusPill": ""
+    }
+  },
+  {
+    "turn": 3,
+    "prompt": "Increase the budget to ₹1,500",
+    "elapsedMs": 1965,
+    "success": true,
+    "data": {
+      "hasBudgetAck": true,
+      "lastMsg": "✦ Browsy AssistantGot it — budget updated to ₹1,500. Remaining active filters: category: shirt, color: black, pattern: checked, size: XL. I found 5 possible matches on this page.What I Understood94% confidenceCategoryshirtColorblackPatterncheckedSizeXLBudget₹1,500 maxMatching Items on this Page (5)Bundles₹600⚠ PartialPrice: ₹600⚠ Category: shirt (unverified)⚠ Color: black (unverified)⚠ Pattern: checked (unverified)⚠ Size XL (unverified)Home⚠ PartialColor: black⚠ Category: shirt (unverified)⚠ Pattern: checked (unverified)⚠ Size XL (unverified)⚠ Price ≤ ₹1,500 (unverified)Only Black⚠ PartialColor: black⚠ Category: shirt (unverified)⚠ Pattern: checked (unverified)⚠ Size XL (unverified)⚠ Price ≤ ₹1,500 (unverified)Running Actions...Step 2 of 1●Search Myntra for \"Increase the budget to ₹1,500\"⏹ Stop Execution06:57 PM",
+      "hasCard": false
+    }
+  },
+  {
+    "turn": 4,
+    "prompt": "Sort the verified results by lowest price",
+    "elapsedMs": 1831,
+    "success": true,
+    "data": {
+      "hasSortAck": true,
+      "lastMsg": "✦ Browsy AssistantGot it — sorted by: price (lowest first). Remaining active filters: category: shirt, color: black, pattern: checked, size: XL, budget: under ₹1,500. I found 1 possible match on this page.What I Understood94% confidenceCategoryshirtColorblackPatterncheckedSizeXLBudget₹1,500 maxMatching Items on this Page (1)Black (6777)⚠ PartialColor: black⚠ Category: shirt (unverified)⚠ Pattern: checked (unverified)⚠ Size XL (unverified)⚠ Price ≤ ₹1,500 (unverified)Running Actions...Step 2 of 6●Search Myntra for \"black checked lowest shirts\"✓Apply black color filter○Apply checked pattern filter○Apply Size XL filter○Apply lowest brand filter○Apply price under ₹1,500⏹ Stop Execution06:57 PM"
+    }
+  }
+]

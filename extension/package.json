@@ -1,0 +1,44 @@
+{
+  "name": "browsy-extension",
+  "version": "0.1.0",
+  "description": "Browsy — AI browser assistant that lives beside the website you're already using.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/build.mjs --watch",
+    "build": "tsc && node scripts/build.mjs",
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/run-intent-tests.mjs && node scripts/run-execution-tests.mjs && node scripts/run-navigation-tests.mjs && node scripts/run-scenario-tests.mjs && node scripts/run-compatibility-tests.mjs && node scripts/run-shopping-regression.mjs && node scripts/run-ollama-tests.mjs && node scripts/run-product-verifier-tests.mjs && node scripts/run-phase4-tests.mjs && node scripts/run-phase5-readiness.mjs",
+    "test:phase5": "node scripts/run-phase5-readiness.mjs",
+    "test:phase4": "node scripts/run-phase4-tests.mjs",
+    "test:intent": "node scripts/run-intent-tests.mjs",
+    "test:execution": "node scripts/run-execution-tests.mjs",
+    "test:navigation": "node scripts/run-navigation-tests.mjs",
+    "test:scenarios": "node scripts/run-scenario-tests.mjs",
+    "test:compatibility": "node scripts/run-compatibility-tests.mjs",
+    "test:shopping": "node scripts/run-shopping-regression.mjs",
+    "test:ollama": "node scripts/run-ollama-tests.mjs",
+    "test:verifier": "node scripts/run-product-verifier-tests.mjs",
+    "test:websites": "node scripts/test-websites.mjs",
+    "test:e2e": "node scripts/test-e2e.mjs",
+    "test:myntra": "node scripts/test-myntra-real.mjs",
+    "test:shadow": "node scripts/test-shadow-dom-live.mjs",
+    "test:polymer": "node scripts/test-polymer-shop-live.mjs",
+    "benchmark:cross-site": "node scripts/run-cross-site-benchmark.mjs"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.308",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.20.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^6.2.0"
+  }
+}
