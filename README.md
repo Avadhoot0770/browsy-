@@ -1,28 +1,35 @@
 # Browsy — The Web, Your Way (v0.1.0-beta)
 
 <p align="center">
-  <img src="website/public/demo/browsy-poster.jpg" alt="Browsy Architecture and Demo Preview" width="850" />
+  <a href="website/public/demo/browsy-demo.mp4" title="Watch the Browsy product walkthrough video">
+    <img src="website/public/demo/browsy-poster.jpg" alt="Browsy Architecture and Demo Preview" width="850" />
+  </a>
 </p>
 
 <p align="center">
   <b>Website-Agnostic • Privacy-Preserving • Supervised AI Browser Assistant (Manifest V3)</b><br />
-  <a href="#-product-demo">🎬 Watch Demo</a> •
-  <a href="#-quickstart--local-development">🚀 Quickstart</a> •
-  <a href="#-architecture--request-lifecycle">🏗️ Architecture</a> •
-  <a href="#-comprehensive-test-suite">🧪 Tests (170/170 Passing)</a> •
+  <a href="#product-demo">🎬 Watch Demo</a> •
+  <a href="#quickstart">🚀 Quickstart</a> •
+  <a href="#architecture">🏗️ Architecture</a> •
+  <a href="#test-suite">🧪 Tests (170/170 Passing)</a> •
   <a href="CHANGELOG.md">📋 Changelog</a>
 </p>
 
 ---
 
+<a id="product-demo"></a>
 ## 🎬 Product Demo
 
 Experience Browsy inspecting a live e-commerce DOM, extracting structured intent, presenting non-blocking visual overlays, and executing a supervised shopping workflow:
 
 <p align="center">
-  <video src="website/public/demo/browsy-demo.mp4" poster="website/public/demo/browsy-poster.jpg" width="850" controls>
-    Your browser does not support the video tag. You can view or download the walkthrough directly: <a href="website/public/demo/browsy-demo.mp4">browsy-demo.mp4</a>.
-  </video>
+  <a href="website/public/demo/browsy-demo.mp4" title="Click to watch or download the Browsy demo video">
+    <img src="website/public/demo/browsy-poster.jpg" alt="Browsy Architecture and Demo Preview - Click to Watch Walkthrough" width="850" />
+  </a>
+</p>
+
+<p align="center">
+  ▶️ <b><a href="website/public/demo/browsy-demo.mp4">Click here to watch or download the Browsy product demo walkthrough (MP4)</a></b>
 </p>
 
 ---
@@ -31,9 +38,10 @@ Experience Browsy inspecting a live e-commerce DOM, extracting structured intent
 
 ---
 
+<a id="architecture"></a>
 ## 🏗️ Architecture & Request Lifecycle
 
-Browsy follows a deterministic, 8-phase supervised browser automation pipeline:
+Browsy follows a deterministic, 9-phase supervised browser automation pipeline:
 
 ```mermaid
 flowchart TD
@@ -75,6 +83,7 @@ flowchart TD
 
 ---
 
+<a id="quickstart"></a>
 ## 🚀 Quickstart & Local Development
 
 ### 1. Prerequisites
@@ -84,8 +93,8 @@ flowchart TD
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd "Browsy - AI Assistant Project"
+git clone https://github.com/Avadhoot0770/browsy-.git
+cd browsy-
 
 # Install all workspace dependencies
 npm install
@@ -132,6 +141,7 @@ To optionally connect Browsy to a local Ollama instance for local LLM inference:
 
 ---
 
+<a id="test-suite"></a>
 ## 🧪 Comprehensive Test Suite
 
 Browsy includes **170 automated tests** across 10 specialized suites with 100% pass rate, plus browser E2E and multi-site matrix suites:
@@ -200,4 +210,4 @@ npm run test:myntra                             # Live real-world e-commerce tes
 Proprietary. All Rights Reserved.  
 Copyright © 2026.
 
-This repository, its source code, architecture, and documentation are proprietary and confidential. Unauthorized copying, distribution, modification, public display, or commercial use without explicit prior written authorization is strictly prohibited.
+This repository, its source code, architecture, and documentation are proprietary. No permission is granted to copy, reuse, modify, or redistribute the source code or assets in any form, or create derivative works, without explicit prior written authorization from the author.
