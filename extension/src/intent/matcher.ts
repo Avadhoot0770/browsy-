@@ -50,11 +50,39 @@ export function evaluateItemMatch(
   const reasons: string[] = [];
   let score = 0;
 
-  const fullText = `${item.title} ${(item.metaText || []).join(" ")} ${(item.badges || []).join(" ")} ${item.imageAlt || ""}`.toLowerCase();
+  const entities = intent.entities || {};
+  const filters = intent.filters || {};
+  const constraints = intent.constraints || {};
+
+  const metaParts = Array.isArray(item.metaText)
+    ? item.metaText
+    : typeof item.metaText === "string"
+    ? [(item as any).metaText]
+    : [];
+  const badgeParts = Array.isArray(item.badges)
+    ? item.badges
+    : typeof (item as any).badge === "string"
+    ? [(item as any).badge]
+    : typeof item.badges === "string"
+    ? [item.badges]
+    : [];
+  const fullText = `${item.title} ${metaParts.join(" ")} ${badgeParts.join(" ")} ${item.imageAlt || ""}`.toLowerCase();
+
+  // 0. Availability & Stock Guard
+  const isOutOfStock =
+    /\b(?:out of stock|sold out|currently unavailable|temporarily unavailable|temporarily out of stock)\b/i.test(fullText);
+  if (isOutOfStock) {
+    evaluations.push({
+      name: "availability",
+      label: "Availability: In Stock",
+      status: "violated",
+      evidence: "Item is explicitly marked out of stock or unavailable",
+    });
+  }
 
   // 1. Category Constraint
-  if (intent.entities.category) {
-    const cat = intent.entities.category.toLowerCase();
+  if (entities.category) {
+    const cat = entities.category.toLowerCase();
     if (fullText.includes(cat)) {
       evaluations.push({
         name: "category",
@@ -84,8 +112,8 @@ export function evaluateItemMatch(
   }
 
   // 2. Color Constraint
-  if (intent.filters.color) {
-    const color = String(intent.filters.color).toLowerCase();
+  if (filters.color) {
+    const color = String(filters.color).toLowerCase();
     const isRedReq = color === "red";
     const colorRegex = isRedReq ? RED_COLOR_REGEX : new RegExp(`\\b${color}\\b`, "i");
 
@@ -118,8 +146,8 @@ export function evaluateItemMatch(
   }
 
   // 3. Pattern Constraint
-  if (intent.filters.pattern) {
-    const pattern = String(intent.filters.pattern).toLowerCase();
+  if (filters.pattern) {
+    const pattern = String(filters.pattern).toLowerCase();
     const isCheckReq = pattern === "checked";
     const patternRegex = isCheckReq ? CHECKED_PATTERN_REGEX : new RegExp(`\\b${pattern}\\b`, "i");
 
@@ -152,8 +180,8 @@ export function evaluateItemMatch(
   }
 
   // 4. Size Constraint
-  if (intent.filters.size) {
-    const size = String(intent.filters.size).toUpperCase();
+  if (filters.size) {
+    const size = String(filters.size).toUpperCase();
     const sizeRegex = new RegExp(`\\b${size}\\b|size:\\s*${size}\\b|extra large`, "i");
 
     if (sizeRegex.test(fullText)) {
@@ -166,7 +194,7 @@ export function evaluateItemMatch(
       verifiedConditions.push(`Size: ${size}`);
       reasons.push(`Size: ${size}`);
       score += 2;
-    } else if (/available\s+sizes?:\s*([smlxxl,\s]+)/i.test(fullText) && !sizeRegex.test(fullText)) {
+    } else if (/(?:available\s+)?sizes?:\s*([a-z0-9,\s]+)/i.test(fullText) && !sizeRegex.test(fullText)) {
       evaluations.push({
         name: "size",
         label: `Size: ${size}`,
@@ -185,8 +213,8 @@ export function evaluateItemMatch(
   }
 
   // 5. Max Price Constraint
-  if (intent.constraints.maxPrice !== undefined) {
-    const maxP = intent.constraints.maxPrice;
+  if (constraints.maxPrice !== undefined) {
+    const maxP = constraints.maxPrice;
     if (item.price && item.price.amount !== undefined) {
       if (item.price.amount <= maxP) {
         evaluations.push({
@@ -218,8 +246,8 @@ export function evaluateItemMatch(
   }
 
   // 6. Min Rating Constraint
-  if (intent.constraints.minRating !== undefined) {
-    const minR = intent.constraints.minRating;
+  if (constraints.minRating !== undefined) {
+    const minR = constraints.minRating;
     if (item.rating && item.rating.score !== undefined) {
       if (item.rating.score >= minR) {
         evaluations.push({

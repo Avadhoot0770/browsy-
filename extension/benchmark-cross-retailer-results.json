@@ -8,16 +8,16 @@
   },
   "amazon": {
     "status": "PASS",
-    "productsExtracted": 65,
+    "productsExtracted": 70,
     "priceVerified": true,
     "currency": "INR",
-    "sampleAsin": "B0H1LVTWKZ"
+    "sampleAsin": "B0HQTTPC8S"
   },
   "flipkart": {
     "status": "PASS",
     "productsExtracted": 40,
     "priceVerified": true,
     "currency": "INR",
-    "sampleId": "SHTGKD73MZJEP6VS"
+    "sampleId": "SHTH9RMDMH43UJTP"
   }
 }
