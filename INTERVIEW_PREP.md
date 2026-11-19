@@ -1,6 +1,6 @@
-# Browsy — Technical Interview Preparation & Architecture Guide
+# Browsy — Technical Architecture & Engineering Deep-Dive
 
-This document is prepared for technical interviews (e.g. AI Software Engineer 1 at Kasparro), detailing the real architecture, design trade-offs, security invariants, and empirical test results of **Browsy**.
+This document provides a comprehensive technical walkthrough of **Browsy**, detailing its system architecture, design trade-offs, security invariants, and empirical test results for engineering reviews and technical interviews.
 
 ---
 

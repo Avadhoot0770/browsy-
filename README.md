@@ -1,4 +1,31 @@
-# Browsy — The Web, Your Way (v0.1.0 Release Candidate)
+# Browsy — The Web, Your Way (v0.1.0-beta)
+
+<p align="center">
+  <img src="website/public/demo/browsy-poster.jpg" alt="Browsy Architecture and Demo Preview" width="850" />
+</p>
+
+<p align="center">
+  <b>Website-Agnostic • Privacy-Preserving • Supervised AI Browser Assistant (Manifest V3)</b><br />
+  <a href="#-product-demo">🎬 Watch Demo</a> •
+  <a href="#-quickstart--local-development">🚀 Quickstart</a> •
+  <a href="#-architecture--request-lifecycle">🏗️ Architecture</a> •
+  <a href="#-comprehensive-test-suite">🧪 Tests (170/170 Passing)</a> •
+  <a href="CHANGELOG.md">📋 Changelog</a>
+</p>
+
+---
+
+## 🎬 Product Demo
+
+Experience Browsy inspecting a live e-commerce DOM, extracting structured intent, presenting non-blocking visual overlays, and executing a supervised shopping workflow:
+
+<p align="center">
+  <video src="website/public/demo/browsy-demo.mp4" poster="website/public/demo/browsy-poster.jpg" width="850" controls>
+    Your browser does not support the video tag. You can view or download the walkthrough directly: <a href="website/public/demo/browsy-demo.mp4">browsy-demo.mp4</a>.
+  </video>
+</p>
+
+---
 
 **Browsy** is a website-agnostic, privacy-preserving AI browser assistant built as a Chrome Extension (Manifest V3). It enables users to give natural-language instructions on any website and have Browsy inspect the page, extract structured intent, propose a step-by-step action plan, visually preview targets directly on the webpage, execute actions safely with supervised user approval, and verify the empirical outcome directly in the DOM.
 
@@ -96,10 +123,12 @@ To optionally connect Browsy to a local Ollama instance for local LLM inference:
    ollama serve
    ```
 3. In a separate terminal, start the Browsy companion bridge:
-   ```bash
-   npm run companion
-   ```
-   *(Note: The companion service runs on `http://127.0.0.1:8765`. It does not start automatically with the browser extension and must be started manually if you wish to use local LLM inference instead of the default deterministic engine).*
+   - **Windows 1-Click Batch**: Double-click `backend\scripts\start-companion.bat` (automated port detection, Ollama verification, and background launcher).
+   - **Cross-Platform CLI**:
+     ```bash
+     npm run companion
+     ```
+   *(Note: The companion service runs on `http://127.0.0.1:8765`. It does not start automatically with the browser extension and must be started manually if you wish to use local LLM inference instead of the default deterministic engine. To stop the companion service on Windows, double-click `backend\scripts\stop-companion.bat` or press `Ctrl+C`).*
 
 ---
 
@@ -161,3 +190,14 @@ npm run test:myntra                             # Live real-world e-commerce tes
 - **Complex Canvas / WebGL**: Canvas-drawn interfaces without accessible DOM backing cannot be queried semantically.
 - **Closed Shadow DOM / Cross-Origin IFrames**: While open Shadow DOM trees are traversed, browsers strictly isolate closed Shadow DOM roots and cross-origin `<iframe>` contexts by design.
 - **Unsupported Site Filters**: When an e-commerce platform does not expose a requested filter (e.g. cashmere material or custom sizes), Browsy truthfully flags it as `PARTIALLY COMPLETED` rather than pretending full completion.
+- **Pagination & Infinite Scrolling**: Current actions evaluate the loaded DOM view; virtualized DOM grids or multi-page product catalogs require explicit pagination navigation or user scrolling.
+- **Bot Detection & CAPTCHA**: Strictly pauses for human intervention when encountering Cloudflare Turnstile, Amazon Robot Check, or Flipkart Shield rather than attempting unauthorized bypasses.
+
+---
+
+## 📄 License
+
+Proprietary. All Rights Reserved.  
+Copyright © 2026.
+
+This repository, its source code, architecture, and documentation are proprietary and confidential. Unauthorized copying, distribution, modification, public display, or commercial use without explicit prior written authorization is strictly prohibited.
