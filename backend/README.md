@@ -26,6 +26,12 @@ ollama serve
 ```
 
 ### 2. Start Browsy Companion Service
+
+#### Windows (1-Click Launchers)
+- **Start:** Double-click `backend\scripts\start-companion.bat` (checks Node/Python, detects port status, verifies Ollama, and starts the service).
+- **Stop:** Double-click `backend\scripts\stop-companion.bat` (finds the process on port 8765 and frees the port).
+
+#### CLI (Cross-Platform)
 ```bash
 # Node.js implementation (Recommended, zero extra dependencies)
 npm run companion
@@ -38,3 +44,19 @@ python backend/companion_service.py
 ```
 
 The service runs strictly on the loopback interface: `http://127.0.0.1:8765`.
+
+## Security Model
+
+The companion service is hardened for local loopback execution:
+- **Loopback-Only Binding:** Listens exclusively on `127.0.0.1`. Never accepts external network traffic.
+- **Strict Origin Validation:** Validates `Origin` headers via `new URL(origin)`. Strictly blocks non-extension and non-loopback domains (e.g. `attacker-localhost.com` is rejected with HTTP 403).
+- **DNS Rebinding Protection:** Validates `Host` headers to prevent cross-origin DNS rebinding attacks.
+- **Exact CORS Reflection:** Never emits wildcard `Access-Control-Allow-Origin: *`.
+- **Port Conflict Handling:** Cleanly catches `EADDRINUSE` with friendly diagnostic instructions and directs users to `stop-companion.bat`.
+
+## Automated Security Testing
+
+Run the automated companion security and reliability test suite:
+```bash
+npm run test:companion
+```

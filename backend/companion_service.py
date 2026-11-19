@@ -11,6 +11,7 @@ import os
 import sys
 import urllib.request
 import urllib.error
+import urllib.parse
 
 PORT = int(os.environ.get("BROWSY_COMPANION_PORT", "8765"))
 HOST = "127.0.0.1"
@@ -18,6 +19,28 @@ OLLAMA_HOST = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434")
 DEFAULT_MODEL = os.environ.get("BROWSY_DEFAULT_MODEL", "qwen2.5:1.5b")
 
 active_model = DEFAULT_MODEL
+
+def is_allowed_origin(origin_str: str) -> bool:
+    if not origin_str:
+        return False
+    if origin_str.startswith("chrome-extension://") or origin_str.startswith("moz-extension://"):
+        return True
+    try:
+        parsed = urllib.parse.urlparse(origin_str)
+        hostname = parsed.hostname
+        return hostname in ("127.0.0.1", "localhost", "::1", "[::1]")
+    except Exception:
+        return False
+
+def is_allowed_host(host_str: str) -> bool:
+    if not host_str:
+        return False
+    try:
+        parsed = urllib.parse.urlparse(f"http://{host_str}")
+        hostname = parsed.hostname
+        return hostname in ("127.0.0.1", "localhost", "::1", "[::1]")
+    except Exception:
+        return False
 
 def check_ollama():
     try:
@@ -32,23 +55,55 @@ def check_ollama():
     return False, []
 
 class BrowsyCompanionHandler(http.server.BaseHTTPRequestHandler):
+    def _validate_security(self):
+        host = self.headers.get("Host", "")
+        origin = self.headers.get("Origin", "")
+
+        # DNS rebinding protection
+        if host and not is_allowed_host(host):
+            self.send_response(403)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": "Access denied: invalid host header."}).encode("utf-8"))
+            return False
+
+        # Origin verification
+        if origin:
+            if not is_allowed_origin(origin):
+                self.send_response(403)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"error": "Access denied: origin not permitted."}).encode("utf-8"))
+                return False
+        return True
+
     def _send_json(self, status, payload):
+        origin = self.headers.get("Origin", "")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
+        if origin and is_allowed_origin(origin):
+            self.send_header("Access-Control-Allow-Origin", origin)
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Browsy-Client, X-Browsy-Simulate")
+        self.send_header("Vary", "Origin")
         self.end_headers()
         self.wfile.write(json.dumps(payload).encode("utf-8"))
 
     def do_OPTIONS(self):
+        if not self._validate_security():
+            return
+        origin = self.headers.get("Origin", "")
         self.send_response(204)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        if origin and is_allowed_origin(origin):
+            self.send_header("Access-Control-Allow-Origin", origin)
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type, X-Browsy-Client, X-Browsy-Simulate")
+        self.send_header("Vary", "Origin")
         self.end_headers()
 
     def do_GET(self):
+        if not self._validate_security():
+            return
         if self.path.startswith("/api/status") or self.path == "/health":
             connected, models = check_ollama()
             self._send_json(200, {
@@ -62,6 +117,8 @@ class BrowsyCompanionHandler(http.server.BaseHTTPRequestHandler):
         self._send_json(404, {"error": "Not Found"})
 
     def do_POST(self):
+        if not self._validate_security():
+            return
         content_length = int(self.headers.get("Content-Length", 0))
         body = json.loads(self.rfile.read(content_length).decode("utf-8")) if content_length > 0 else {}
 
@@ -105,7 +162,16 @@ class BrowsyCompanionHandler(http.server.BaseHTTPRequestHandler):
         self._send_json(404, {"error": "Not Found"})
 
 def run():
-    server = http.server.ThreadingHTTPServer((HOST, PORT), BrowsyCompanionHandler)
+    try:
+        server = http.server.ThreadingHTTPServer((HOST, PORT), BrowsyCompanionHandler)
+    except OSError as e:
+        if getattr(e, "errno", None) in (48, 98, 10048):  # EADDRINUSE across OSes / Windows WSAEADDRINUSE
+            print(f"\n❌ [Browsy Companion] Port {PORT} is already in use.")
+            print(f"   Another instance of Browsy Companion or another service is listening on http://{HOST}:{PORT}.")
+            print(f"   To free port {PORT} on Windows, run: backend\\scripts\\stop-companion.bat\n")
+            sys.exit(1)
+        raise
+
     print(f"🤖 Browsy Companion (Python) listening on http://{HOST}:{PORT}")
     try:
         server.serve_forever()

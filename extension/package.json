@@ -19,6 +19,7 @@
     "test:compatibility": "node scripts/run-compatibility-tests.mjs",
     "test:shopping": "node scripts/run-shopping-regression.mjs",
     "test:ollama": "node scripts/run-ollama-tests.mjs",
+    "test:companion": "node scripts/test-companion-service.mjs",
     "test:verifier": "node scripts/run-product-verifier-tests.mjs",
     "test:websites": "node scripts/test-websites.mjs",
     "test:e2e": "node scripts/test-e2e.mjs",

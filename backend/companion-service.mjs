@@ -16,7 +16,8 @@
  */
 
 import http from 'node:http';
-import { URL } from 'node:url';
+import { URL, fileURLToPath } from 'node:url';
+import path from 'node:path';
 import os from 'node:os';
 
 const PORT = parseInt(process.env.BROWSY_COMPANION_PORT || '8765', 10);
@@ -151,26 +152,72 @@ async function queryOllamaJSON(prompt, systemPrompt, model = activeModel, timeou
   }
 }
 
-// Security: Validate Origin & Client headers
-function validateSecurity(req, res) {
-  const origin = req.headers['origin'] || '';
-  const clientHeader = req.headers['x-browsy-client'];
+// Security: Verify Origin is an extension or strictly loopback
+function isAllowedOrigin(originStr) {
+  if (!originStr || typeof originStr !== 'string') return false;
+  // Chrome and Firefox extension origins
+  if (originStr.startsWith('chrome-extension://') || originStr.startsWith('moz-extension://')) {
+    return true;
+  }
+  try {
+    const parsed = new URL(originStr);
+    const hostname = parsed.hostname;
+    // Strictly loopback addresses only
+    return (
+      hostname === '127.0.0.1' ||
+      hostname === 'localhost' ||
+      hostname === '::1' ||
+      hostname === '[::1]'
+    );
+  } catch {
+    return false;
+  }
+}
 
-  // Reject requests from arbitrary remote websites
+// Security: Verify Host header to protect against DNS rebinding attacks
+function isAllowedHost(hostStr) {
+  if (!hostStr || typeof hostStr !== 'string') return false;
+  try {
+    const parsed = new URL(`http://${hostStr}`);
+    const hostname = parsed.hostname;
+    return (
+      hostname === '127.0.0.1' ||
+      hostname === 'localhost' ||
+      hostname === '::1' ||
+      hostname === '[::1]'
+    );
+  } catch {
+    return false;
+  }
+}
+
+// Security: Validate Origin, Host & Client headers
+function validateSecurity(req, res) {
+  const host = req.headers['host'] || '';
+  const origin = req.headers['origin'] || '';
+
+  // 1. DNS Rebinding Protection: Host header must strictly point to loopback
+  if (host && !isAllowedHost(host)) {
+    res.writeHead(403, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Access denied: invalid host header.' }));
+    return false;
+  }
+
+  // 2. Origin Check: If Origin header is present, it MUST be an extension or loopback
   if (origin) {
-    const isExtension = origin.startsWith('chrome-extension://') || origin.startsWith('moz-extension://');
-    const isLocalhost = origin.includes('127.0.0.1') || origin.includes('localhost');
-    if (!isExtension && !isLocalhost) {
+    if (!isAllowedOrigin(origin)) {
       res.writeHead(403, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Access denied: origin not permitted.' }));
       return false;
     }
+    // Reflect ONLY explicitly validated origins
+    res.setHeader('Access-Control-Allow-Origin', origin);
   }
 
   // Set safe CORS headers strictly for loopback / extension
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Browsy-Client, X-Browsy-Simulate');
+  res.setHeader('Vary', 'Origin');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -691,19 +738,42 @@ Return JSON:
   }
 });
 
-// Start loopback server
-server.listen(PORT, HOST, () => {
-  const hw = getHardwareProfile();
-  console.log('===========================================================');
-  console.log(`🤖 BROWSY LOCAL AI COMPANION SERVICE`);
-  console.log(`📡 Listening strictly on: http://${HOST}:${PORT} (Loopback)`);
-  console.log(`🔗 Target Ollama daemon: ${OLLAMA_HOST}`);
-  console.log(`🧠 Hardware profile: ${hw.cpuModel} (${hw.cpuCores} cores)`);
-  console.log(`💾 RAM: ${hw.totalMemGB} GB total (${hw.freeMemGB} GB free)`);
-  console.log(`💡 Recommended model for this hardware: ${hw.recommendedModel}`);
-  console.log(`🎯 Active model: ${activeModel}`);
-  console.log('===========================================================');
+// Port conflict & server error handling
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ [Browsy Companion] Port ${PORT} is already in use.`);
+    console.error(`   Another instance of Browsy Companion or another service is listening on http://${HOST}:${PORT}.`);
+    console.error(`   To free port ${PORT} on Windows, run: backend\\scripts\\stop-companion.bat`);
+    console.error(`   Or specify a custom port: set BROWSY_COMPANION_PORT=8766 && node backend/companion-service.mjs\n`);
+    process.exit(1);
+  } else {
+    console.error(`\n❌ [Browsy Companion] Server error:`, err);
+    process.exit(1);
+  }
 });
+
+function startServer(port = PORT, host = HOST) {
+  return server.listen(port, host, () => {
+    const hw = getHardwareProfile();
+    console.log('===========================================================');
+    console.log(`🤖 BROWSY LOCAL AI COMPANION SERVICE`);
+    console.log(`📡 Listening strictly on: http://${host}:${port} (Loopback)`);
+    console.log(`🔗 Target Ollama daemon: ${OLLAMA_HOST}`);
+    console.log(`🧠 Hardware profile: ${hw.cpuModel} (${hw.cpuCores} cores)`);
+    console.log(`💾 RAM: ${hw.totalMemGB} GB total (${hw.freeMemGB} GB free)`);
+    console.log(`💡 Recommended model for this hardware: ${hw.recommendedModel}`);
+    console.log(`🎯 Active model: ${activeModel}`);
+    console.log('===========================================================');
+  });
+}
+
+const isDirectExecution = process.argv[1] && (
+  fileURLToPath(import.meta.url) === path.resolve(process.argv[1])
+);
+
+if (isDirectExecution) {
+  startServer();
+}
 
 // Clean shutdown handler
 process.on('SIGINT', () => {
@@ -714,4 +784,4 @@ process.on('SIGTERM', () => {
   server.close(() => process.exit(0));
 });
 
-export { server, getHardwareProfile, checkOllamaAvailability };
+export { server, startServer, getHardwareProfile, checkOllamaAvailability, isAllowedOrigin, isAllowedHost, validateSecurity };

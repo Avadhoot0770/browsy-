@@ -13,6 +13,7 @@
     "build:website": "npm --prefix website run build",
     "build:extension": "npm --prefix extension run build",
     "test": "npm --prefix extension test",
+    "test:companion": "npm --prefix extension run test:companion",
     "test:ollama": "npm --prefix extension run test:ollama",
     "test:compatibility": "npm --prefix extension run test:compatibility",
     "test:shopping": "npm --prefix extension run test:shopping",
